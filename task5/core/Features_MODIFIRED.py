@@ -9,7 +9,6 @@ import numpy as np
 def extract(audio_paths, extractor, output_path,
             clip_duration=None, overwrite=False):
     mode = 'w' if overwrite else 'a'
-    print(output_path)
     with h5py.File(output_path, mode) as f:
         # Create/load the relevant HDF5 datasets
         size = len(audio_paths)
@@ -18,7 +17,6 @@ def extract(audio_paths, extractor, output_path,
         if clip_duration is None:
             dtype = h5py.vlen_dtype('float32')
             feats = f.require_dataset('F', (size,), dtype)
-        
 
             # Record shape of reference feature vector. Used to infer
             # the original shape of a vector prior to flattening.
@@ -28,6 +26,8 @@ def extract(audio_paths, extractor, output_path,
             feats = f.require_dataset('F', shape, dtype='float32')
 
         indexes = dict()
+        print("Hello------------" , indexes)
+        
         for i, path in enumerate(audio_paths):
             # Associate index of feature vector with file name
             indexes[path.name] = i
@@ -49,24 +49,27 @@ def extract(audio_paths, extractor, output_path,
             timestamps[i] = datetime.now().isoformat()
 
         # Store `indexes` dictionary as a string
+        print("SHOROOOKKKKKK", str({**indexes_prev, **indexes}))
         f.require_dataset('indexes', (), dtype=str_dtype)
         if indexes:
-            stringFiles = str(f['indexes'][()])
-            stringFiles = stringFiles[2 : len(stringFiles) - 1]
-            indexes_prev = ast.literal_eval(stringFiles)
+            indexes_prev = ast.literal_eval(f['indexes'][()] or '{}')
             f['indexes'][()] = str({**indexes_prev, **indexes})
 
-
+import json
 def load(path, file_names=None):
     with h5py.File(path, 'r') as f:
         # Determine the corresponding indexes for each file name
-        stringFiles = str(f['indexes'][()])
-        stringFiles = stringFiles[2 : len(stringFiles) - 1]
-        mapping = ast.literal_eval(stringFiles)
         
+        array = str(f['indexes'][()])
+        mapping = ast.literal_eval(array[1:])
         
+        # jsonArray = (array[3:len(array)-2]).split(',')
+        # #print(jsonArray[0])
+        # js = json.loads("{"+array[3:len(array)-2]+"}")
+        # print(array[3:len(array)-2])
+        # print("JOSOOOSN", js[0])
+        print("MEOWWWW",mapping)
         indexes = np.array([mapping[name] for name in file_names])
-
         # Ensure indexes are in ascending order for h5py indexing
         # Reverse the permutation after loading the h5py dataset subset
         sort_indexes = indexes.argsort()
@@ -83,7 +86,7 @@ class LogmelExtractor:
                  sample_rate=32000,
                  n_fft=1024,
                  hop_length=512,
-                 n_mels=32,
+                 n_mels=64,
                  ):
         self.sample_rate = sample_rate
         self.n_fft = n_fft

@@ -17,7 +17,7 @@ trial() {
   python task5/train.py -f "$1" --model $2 --seed $3 --training_id "$id"
 
   echo -e "\nPredicting for '$id'..."
-  python task5/predict.py -f "$1" 'validation' --training_id "$id" --clean=True
+  python task5/predict.py -f "$1" 'validation' --training_id "$id" --clean=False
 }
 
 experiment() {
@@ -27,9 +27,12 @@ experiment() {
 
 extract 1024
 extract 2048
-
 experiment 'scripts/w1024_max.conf' 'qkcnn10'
 experiment 'scripts/w2048_max.conf' 'qkcnn10'
 experiment 'scripts/w1024_pseudo.conf' 'qkcnn10'
 experiment 'scripts/w2048_pseudo.conf' 'qkcnn10'
+
 experiment 'scripts/w2048_pseudo.conf' 'gcnn'
+experiment 'scripts/w1024_max.conf' 'gcnn'
+experiment 'scripts/w2048_max.conf' 'gcnn'
+experiment 'scripts/w1024_pseudo.conf' 'gcnn'

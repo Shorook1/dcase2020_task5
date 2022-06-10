@@ -38,6 +38,7 @@ def extract(args):
     print(f'Extracting features with shape {shape}...')
     print(f'Output path: {output_path}')
     audio_paths = tqdm(subset.audio_paths)
+    print(audio_paths)
     features.extract(audio_paths,
                      extractor,
                      output_path,

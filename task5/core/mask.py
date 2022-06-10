@@ -15,7 +15,7 @@ class FrameMask:
             elif df.dtypes[key] == float:
                 value = float(value)
 
-            mask &= op(df[key], value)
+            mask &= op(df[key], float(value))
         return mask
 
     def _parse(spec):

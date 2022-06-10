@@ -35,7 +35,7 @@ def predict(args):
     model_dir = args.model_dir / args.training_id
     epochs = _determine_epochs(args.epochs, log_dir)
     def _predict(epoch):
-        y = training.predict(x, epoch, model_dir, args.use_stc)
+        y = training.predict(x, epoch, model_dir, args.use_stc, batch_size=16 )
         return pd.DataFrame(y, fnames.index, subset.dataset.label_set)
     preds = [utils.timeit(lambda: _predict(epoch),
                           f'[Epoch {epoch}] Computed predictions')
@@ -61,11 +61,11 @@ def predict(args):
                          epochs=args.epochs,
                          )
 
-    # Remove model files that were not used for prediction
+    #Remove model files that were not used for prediction
     if args.clean:
-        count = 0
+       count = 0
         for path in model_dir.glob('model.[0-9][0-9].pth'):
-            if int(str(path)[-6:-4]) not in epochs:
+           if int(str(path)[-6:-4]) not in epochs:
                 path.unlink()
                 count += 1
         print(f'Removed {count} unused model files')

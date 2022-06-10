@@ -22,7 +22,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     with open(args.yaml_path, 'r') as f:
-        taxonomy = yaml.load(f)
+        taxonomy = yaml.full_load(f)
 
     metrics = {}
     for mode in ("fine", "coarse"):

@@ -12,5 +12,7 @@ evaluate() {
 }
 
 evaluate 'qkcnn10_w1024_max'
+evaluate 'qkcnn10_w2048_max'
 evaluate 'qkcnn10_w1024_pseudo'
+evaluate 'qkcnn10_w2048_pseudo'
 evaluate 'gcnn_w2048_pseudo'

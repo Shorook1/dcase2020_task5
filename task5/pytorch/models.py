@@ -14,7 +14,8 @@ class GCNN(nn.Module):
             GatedConvBlock(in_channels=64, out_channels=128),
             GatedConvBlock(in_channels=128, out_channels=256),
             GatedConvBlock(in_channels=256, out_channels=512),
-            GatedConvBlock(in_channels=512, out_channels=512),
+            GatedConvBlock(in_channels=512, out_channels=1024),
+            GatedConvBlock(in_channels=1024, out_channels=512),
         )
 
         n_aux_out = (n_aux or 0) * 2
